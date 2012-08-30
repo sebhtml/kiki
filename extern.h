@@ -26,21 +26,21 @@
 
 #define KI_STRING        0x00010000
 #define KI_VECTOR        0x00100000
-#define KI_CHAR          MPI_CHAR
-#define KI_BYTE          MPI_BYTE
-#define KI_BOOL          MPI_INT
-#define KI_INT           MPI_INT
-#define KI_LONG          MPI_LONG
-#define KI_FLOAT         MPI_FLOAT
-#define KI_DOUBLE        MPI_DOUBLE
-#define KI_LONG_LONG     MPI_LONG_LONG
-#define KI_V_CHAR        (MPI_CHAR      | KI_VECTOR)
-#define KI_V_BYTE        (MPI_BYTE      | KI_VECTOR)
-#define KI_V_INT         (MPI_INT       | KI_VECTOR)
-#define KI_V_LONG        (MPI_LONG      | KI_VECTOR)
-#define KI_V_FLOAT       (MPI_FLOAT     | KI_VECTOR)
-#define KI_V_DOUBLE      (MPI_DOUBLE    | KI_VECTOR)
-#define KI_V_LONG_LONG   (MPI_LONG_LONG | KI_VECTOR)
+#define KI_CHAR          0x00 /* MPI_CHAR */
+#define KI_BYTE          0x01 /* MPI_BYTE */
+#define KI_BOOL          0x02 /* MPI_INT */
+#define KI_INT           0x03 /* MPI_INT */
+#define KI_LONG          0x04 /* MPI_LONG */
+#define KI_FLOAT         0x05 /* MPI_FLOAT */
+#define KI_DOUBLE        0x06 /* MPI_DOUBLE */
+#define KI_LONG_LONG     0x07 /* MPI_LONG_LONG */
+#define KI_V_CHAR        (KI_CHAR       | KI_VECTOR)
+#define KI_V_BYTE        (KI_BYTE      | KI_VECTOR)
+#define KI_V_INT         (KI_INT       | KI_VECTOR)
+#define KI_V_LONG        (KI_LONG      | KI_VECTOR)
+#define KI_V_FLOAT       (KI_FLOAT     | KI_VECTOR)
+#define KI_V_DOUBLE      (KI_DOUBLE    | KI_VECTOR)
+#define KI_V_LONG_LONG   (KI_LONG_LONG | KI_VECTOR)
 
 #define KI_NUM_FUNCS     100
 /* #define KI_BUF_SIZE      0x08000000 /\* 128MB *\/ */
