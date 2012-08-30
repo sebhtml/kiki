@@ -282,5 +282,6 @@ void kiExactAssemble(char* outputName);
 
 MPI_Datatype convertToMPIDatatype(int kiDatatype);
 ki_func_t kiGetCommandFunction(int cmd);
+bool kiIsValidCommand(int cmd);
 
 #endif /* _KI_H_ */

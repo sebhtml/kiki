@@ -1259,6 +1259,10 @@ void kiDealerStart() {
   }
 }
 
+bool kiIsValidCommand(int cmd) {
+  return 0 <= cmd && cmd < KI_NUM_FUNCS;
+}
+
 void kiFarmerStart() {
   MPI_Status status;
   
@@ -1279,6 +1283,9 @@ void kiFarmerStart() {
 
     MPI_Unpack(ki_in_buf, KI_BUF_SIZE, &pos, &cmd, 1, MPI_INT, ki_cmm_world);
   
+    if(!kiIsValidCommand(cmd))
+      printf("Warning: received invalid command %d from %d\n", cmd, src);
+
     pos = kiRunCommand(cmd);
     if (pos < 0) break;         /* KI_CMD_STOP */
     
@@ -1340,8 +1347,7 @@ int kiRunCommand(int cmd) {
   int outputSize = 0;
   ki_func_t func = kiGetCommandFunction(cmd);
   if (func == NULL) {
-    if (kiIsDomainRoot()) 
-      fprintf(stderr, "Error: command %d not registered.\n", cmd);
+    fprintf(stderr, "Error: command %d not registered on MPI rank %d.\n", cmd, ki_domain_rank);
   } else {
     outputSize = (*func)();
   }
