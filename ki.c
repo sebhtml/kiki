@@ -1380,6 +1380,10 @@ void kiPrintBuffer(char* buf, int len) {
 void kiPackArgs(void* buf, int bufSize, /*IN/OUT*/int* position, /*IN*/...) {
   int type, count;
   void* arg;
+  MPI_Datatype mpiType;
+
+  mpiType=MPI_CHAR;
+  count = 0;
 
   va_list vl;
   va_start(vl, position);
@@ -1389,19 +1393,20 @@ void kiPackArgs(void* buf, int bufSize, /*IN/OUT*/int* position, /*IN*/...) {
       count = strlen(arg) + 1;
       MPI_Pack(&count, 1, MPI_INT, buf, bufSize, position, ki_cmm_world);
       kipmsg(6, "[STR_SIZE=%d] ", count);
-      type = MPI_CHAR;
+      mpiType = MPI_CHAR;
     } else {
       if ((type & KI_VECTOR) == KI_VECTOR) {
         count = va_arg(vl, int);
         MPI_Pack(&count, 1, MPI_INT, buf, bufSize, position, ki_cmm_world);
         kipmsg(6, "[VEC_SIZE=%d] ", count);
         type ^= KI_VECTOR;      /* convert to MPI_Datatype */
+	mpiType = convertToMPIDatatype(type);
       } else {
         count = 1;
       }
       arg = va_arg(vl, void*);
     }
-    MPI_Pack(arg, count, type, buf, bufSize, position, ki_cmm_world);
+    MPI_Pack(arg, count, mpiType, buf, bufSize, position, ki_cmm_world);
     {                           /* debugging output */
       int i;
       pmsg(6, "{");
@@ -1416,27 +1421,58 @@ void kiPackArgs(void* buf, int bufSize, /*IN/OUT*/int* position, /*IN*/...) {
   va_end(vl);
 }
 
+MPI_Datatype convertToMPIDatatype(int kiDatatype){
+  switch (kiDatatype) {
+    case KI_CHAR:
+      return MPI_CHAR;
+    case KI_BYTE:
+      return MPI_BYTE;
+    case KI_BOOL:
+      return MPI_INT;
+    case KI_INT:
+      return MPI_INT;
+    case KI_LONG:
+      return MPI_LONG;
+    case KI_FLOAT:
+      return MPI_FLOAT;
+    case KI_DOUBLE:
+      return MPI_DOUBLE;
+    case KI_LONG_LONG:
+      return MPI_LONG_LONG;
+    default:
+      #ifdef ASSERT
+      assert(false);
+      #endif
+      return MPI_INT;
+  }
+}
+
 void kiUnpackArgs(void* buf, int bufSize, int* position, /*OUT*/...) {
   int type, count;
   int* argcount;
   void* arg;
+  MPI_Datatype mpiType;
+
+  mpiType = MPI_CHAR;
+  count = 0;
 
   va_list vl;
   va_start(vl, position);
   while ((type = va_arg(vl, int)) != KI_UNDEF) {
     if (type == KI_STRING) {
       MPI_Unpack(buf, bufSize, position, &count, 1, MPI_INT, ki_cmm_world);      
-      type = MPI_CHAR;
+      mpiType = MPI_CHAR;
     } else if ((type & KI_VECTOR) == KI_VECTOR) {
       argcount = va_arg(vl, int*);
       MPI_Unpack(buf, bufSize, position, argcount, 1, MPI_INT, ki_cmm_world);      
       count = *argcount;
       type ^= KI_VECTOR;        /* convert to MPI_Datatype */
+      mpiType = convertToMPIDatatype(type);
     } else {
       count = 1;
     }
     arg = va_arg(vl, void*);
-    MPI_Unpack(buf, bufSize, position, arg, count, type, ki_cmm_world);
+    MPI_Unpack(buf, bufSize, position, arg, count, mpiType, ki_cmm_world);
   }
   va_end(vl);
 }

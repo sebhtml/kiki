@@ -279,5 +279,6 @@ bool kiIsFastq(char* fileName);
 void kiExtendSeq(/*IN/OUT*/char* seq, /*IN*/int sz, int beg, int root, /*OUT*/int* advance, int* leader); /* advance: advancement in number of chars; leader: rank of node that achieved greatest advancement */
 void kiExactAssemble(char* outputName);
 
+MPI_Datatype convertToMPIDatatype(int kiDatatype);
 
 #endif /* _KI_H_ */
