@@ -1077,6 +1077,12 @@ void kiDomainInit() {
   int* ranks[3];
   int i, j;
   
+  if(ki_world_size < 3) {
+    fprintf(stderr, "Error: kiki needs at least 3 MPI ranks\n");
+    MPI_Finalize();
+    exit(1);
+  }
+
   assert(ki_world_size >= 3);
   /* if (ki_world_size >= 8) { */
   /*   ratio[0] = 0.1; */
