@@ -9,7 +9,7 @@
 
 #define KI_UNDEF                    -1
 
-#define KI_CMD_STOP                 -1
+#define KI_CMD_STOP                 0
 #define KI_CMD_MEM_INFO             1
 #define KI_CMD_LOAD_SEQ             2
 #define KI_CMD_LOAD_FASTA           3
@@ -29,7 +29,8 @@
 #define KI_CMD_RAIPHY_ORIGINAL      17
 #define KI_CMD_STORE_STATE          18
 #define KI_CMD_RESTORE_STATE        19
-#define KI_CMD_TEST_ARGS            99
+#define KI_CMD_TEST_ARGS            20
+#define KI_NUM_FUNCS                21
 
 
 #define KI_OGV_NEW                  0
@@ -280,5 +281,6 @@ void kiExtendSeq(/*IN/OUT*/char* seq, /*IN*/int sz, int beg, int root, /*OUT*/in
 void kiExactAssemble(char* outputName);
 
 MPI_Datatype convertToMPIDatatype(int kiDatatype);
+ki_func_t kiGetCommandFunction(int cmd);
 
 #endif /* _KI_H_ */

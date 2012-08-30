@@ -1321,12 +1321,18 @@ bool kiIsMyTurn() {
   return (ki_domain_rank == ki_round_robin || !kiIsParallel());
 }
 
+ki_func_t kiGetCommandFunction(int cmd) {
+  if(cmd >= 0 && cmd < KI_NUM_FUNCS)
+    return ki_functions[cmd];
+  return NULL;
+}
+
 int kiRunCommand(int cmd) {
   /* check if cmd is valid */
   if (cmd == KI_CMD_STOP) return -1;
 
   int outputSize = 0;
-  ki_func_t func = ki_functions[cmd];
+  ki_func_t func = kiGetCommandFunction(cmd);
   if (func == NULL) {
     if (kiIsDomainRoot()) 
       fprintf(stderr, "Error: command %d not registered.\n", cmd);

@@ -42,7 +42,6 @@
 #define KI_V_DOUBLE      (KI_DOUBLE    | KI_VECTOR)
 #define KI_V_LONG_LONG   (KI_LONG_LONG | KI_VECTOR)
 
-#define KI_NUM_FUNCS     100
 /* #define KI_BUF_SIZE      0x08000000 /\* 128MB *\/ */
 #define KI_BUF_SIZE      0x04000000 /* 64MB */
 /* #define KI_BUF_SIZE      0x02000000 /\* 32MB *\/ */
